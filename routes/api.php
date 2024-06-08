@@ -18,3 +18,8 @@ Route::group([], function () {
     Route::get('/todo', [TodoController::class, 'index']);
     Route::delete('/todo/{id}', [TodoController::class, 'destroy']);
 });
+
+Route::get('/jeep', function (Request $request) {
+    \Log::info('Reached /api/jeep route');
+    return response()->json(['message' => 'Hello from /api/jeep']);
+});
