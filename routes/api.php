@@ -1,13 +1,22 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodoController;
-use App\Models\Todo;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
+
+// public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', [AuthController::class, 'getUser']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+});
+
 
 
 Route::group([], function () {
@@ -17,9 +26,4 @@ Route::group([], function () {
     Route::get('/todo/{id}', [TodoController::class, 'show']);
     Route::get('/todo', [TodoController::class, 'index']);
     Route::delete('/todo/{id}', [TodoController::class, 'destroy']);
-});
-
-Route::get('/jeep', function (Request $request) {
-    \Log::info('Reached /api/jeep route');
-    return response()->json(['message' => 'Hello from /api/jeep']);
 });
