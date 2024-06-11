@@ -11,13 +11,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $fields = $request->validate([
-            'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed',
         ]);
 
         $user = User::create([
-            'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
         ]);
@@ -70,13 +68,8 @@ class AuthController extends Controller
 
     public function getUser()
     {
-        $userData = auth()->user();
+        $user = auth()->user();
 
-        $response = [
-            'data' => $userData,
-            'id' => auth()->user()->id
-        ];
-
-        return response($response, 200);
+        return response($user, 200);
     }
 }

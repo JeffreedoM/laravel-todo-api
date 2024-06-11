@@ -10,9 +10,15 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Todo::all();
+        // Get the authenticated user's ID
+        $userId = auth()->id();
+
+        // Retrieve all Todo items for the authenticated user
+        $todos = Todo::where('user_id', $userId)->get();
+
+        return response()->json($todos);
     }
 
     /**
@@ -30,10 +36,14 @@ class TodoController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'isCompleted' => 'required'
+            'isCompleted' => 'required',
         ]);
 
-        return Todo::create($request->all());
+        return Todo::create([
+            'name' => $request->name,
+            'isCompleted' => $request->isCompleted,
+            'user_id' => auth()->id()
+        ]);
     }
 
     /**
