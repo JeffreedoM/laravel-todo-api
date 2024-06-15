@@ -35,6 +35,7 @@ class AuthController extends Controller
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
+            'remember_me' => 'boolean',
         ]);
 
         // Check email
@@ -57,7 +58,7 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         auth()->user()->tokens()->delete();
 
